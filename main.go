@@ -46,7 +46,7 @@ func main() {
 	}
 	dbFlag := cli.StringFlag{
 		Name:  "db",
-		Value: path.Join(configFlag.Value, core.DefaultDbFolder),
+		Value: core.DefaultDbFolder,
 		Usage: "Folder in which to keep the database (boltdb file)",
 	}
 	seedFlag := cli.StringFlag{
@@ -151,7 +151,7 @@ func main() {
 				return runCmd(c)
 			},
 		},
-		{
+		cli.Command{
 			Name:    "fetch",
 			Aliases: []string{"f"},
 			Usage:   "fetch some randomness",
@@ -411,7 +411,7 @@ func contextToConfig(c *cli.Context) *core.Config {
 
 	config := c.GlobalString("config")
 	opts = append(opts, core.WithConfigFolder(config))
-	db := c.GlobalString("db")
+	db := path.Join(config, c.GlobalString("db"))
 	opts = append(opts, core.WithDbFolder(db))
 	period := c.Duration("period")
 	opts = append(opts, core.WithBeaconPeriod(period))
